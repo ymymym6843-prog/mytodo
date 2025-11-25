@@ -1,0 +1,24 @@
+CREATE DATABASE IF NOT EXISTS mytodo;
+USE mytodo;
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    text VARCHAR(255) NOT NULL,
+    category VARCHAR(50) DEFAULT 'all',
+    repetition VARCHAR(50) DEFAULT 'none',
+    priority VARCHAR(50) DEFAULT 'none',
+    emoji VARCHAR(10),
+    due_date DATE,
+    due_time VARCHAR(10),
+    completed BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
