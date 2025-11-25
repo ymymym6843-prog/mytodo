@@ -50,7 +50,7 @@ app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        db.query('INSERT INTO users (username, password) VALUES (?, ?)',
+        db.query('INSERT INTO users (username, password_hash) VALUES (?, ?)',
             [username, hashedPassword], (err) => {
                 if (err) return res.status(400).json({ msg: '이미 있는 아이디입니다.' });
                 res.json({ msg: '가입 성공' });
@@ -65,7 +65,7 @@ app.post('/api/login', (req, res) => {
         if (err) return res.status(500).json({ error: 'Database error' });
         if (results.length === 0) return res.status(401).json({ msg: '없는 아이디입니다.' });
         const user = results[0];
-        const match = await bcrypt.compare(password, user.password);
+        const match = await bcrypt.compare(password, user.password_hash);
         if (match) {
             req.session.userId = user.id;
             req.session.username = user.username;
